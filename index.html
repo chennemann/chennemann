@@ -19,7 +19,15 @@
     <h2 class="challengeHeadline">Challenges</h2>
 </div>
 
+<div id="confirmationDialog" class="modal">
+    <p id="confirmationText"></p>
+    <a href="#" rel="modal:close" id="cancelButton"></a>
+    <button id="confirmationButton"></button>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css"/>
 <script src="https://www.gstatic.com/firebasejs/5.9.0/firebase.js"></script>
 <script>
     // Initialize Firebase
@@ -84,7 +92,7 @@
             return a.name === b.name ? 0 : a.name < b.name ? -1 : 1;
         });
 
-        copiedUsers.sort(function(a, b) {
+        copiedUsers.sort(function (a, b) {
 
             var completedChallengeCountA = 0;
             if (a.completedChallenges !== undefined) {
@@ -110,7 +118,7 @@
 
             var position = document.createElement("div");
             position.setAttribute("class", "position");
-            position.appendChild(document.createTextNode((index+1) + "."));
+            position.appendChild(document.createTextNode((index + 1) + "."));
 
             var userName = document.createElement("div");
             userName.setAttribute("class", "userName");
@@ -162,18 +170,30 @@
                 uncheckButton.setAttribute("class", "checkButton");
                 uncheckButton.onclick = function () {
 
-                    var completed = [];
-                    if (user.completedChallenges !== undefined && user.completedChallenges !== null) {
-                        user.completedChallenges.forEach(function (value) {
-                            if (value != challengeKey) {
-                                completed.push(value);
-                            }
-                        });
-                    }
+                    $("#confirmationText").text("Are you sure that " + user.name + " has not completed the challenge '" + challenge + "'?");
 
-                    database.ref('users/' + user.id).update({completedChallenges: completed});
+                    $("#cancelButton").text("No, I clicked accidentally");
+                    var confirmationButton = $("#confirmationButton");
+                    confirmationButton.text("Yes, revert it please");
+                    confirmationButton.click(function () {
+                        $.modal.close();
 
-                    location.reload()
+                        var completed = [];
+                        if (user.completedChallenges !== undefined && user.completedChallenges !== null) {
+                            user.completedChallenges.forEach(function (value) {
+                                if (value !== challengeKey) {
+                                    completed.push(value);
+                                }
+                            });
+                        }
+
+                        database.ref('users/' + user.id).update({completedChallenges: completed});
+
+                        location.reload();
+                    });
+
+
+                    $('#confirmationDialog').modal();
                 };
                 uncheckButton.innerHTML = "\u2713";
                 actionContainer.appendChild(uncheckButton);
@@ -183,17 +203,27 @@
                 checkButton.setAttribute("class", "checkButton");
                 checkButton.onclick = function () {
 
-                    var completed = [];
-                    if (user.completedChallenges !== undefined && user.completedChallenges !== null) {
-                        user.completedChallenges.forEach(function (value) {
-                            completed.push(value);
-                        });
-                    }
+                    $("#confirmationText").text("Congratulations " + user.name + "! You managed to complete the challenge '" + challenge + "'...");
 
-                    completed.push(challengeKey);
-                    database.ref('users/' + user.id).update({completedChallenges: completed});
+                    $("#cancelButton").text("No... I clicked accidentally...");
+                    var confirmationButton = $("#confirmationButton");
+                    confirmationButton.text("YESSS!!!! I'm so proud...");
+                    confirmationButton.click(function () {
+                        $.modal.close();
+                        var completed = [];
+                        if (user.completedChallenges !== undefined && user.completedChallenges !== null) {
+                            user.completedChallenges.forEach(function (value) {
+                                completed.push(value);
+                            });
+                        }
 
-                    location.reload()
+                        completed.push(challengeKey);
+                        database.ref('users/' + user.id).update({completedChallenges: completed});
+
+                        location.reload();
+                    });
+
+                    $("#confirmationDialog").modal();
                 };
                 checkButton.innerHTML = "I did it!";
                 actionContainer.appendChild(checkButton);
@@ -210,7 +240,6 @@
 
         challengeContainer.appendChild(selectionContainer);
         $("#contentContainer").append(challengeContainer);
-
 
 
     }

@@ -57,10 +57,6 @@ h1#headline {
     padding: 25px;
 }
 
-.challengeContainer {
-    padding-bottom: 0;
-}
-
 .challengeTitle {
     padding: 15px;
     background: #eee;
@@ -103,7 +99,7 @@ h1#headline {
     font-weight: bold;
 }
 
-.checked button.checkButton {
+.checked .checkButton {
     background-color: transparent;
     color: #4CAF50;
     width: 77px;
