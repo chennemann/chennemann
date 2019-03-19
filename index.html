@@ -128,7 +128,7 @@
                                 var userSpecificCell = document.createElement("td");
                                 var completedChallenges = user.completedChallenges;
                                 if (completedChallenges !== undefined && completedChallenges.indexOf(key) !== -1) {
-                                    userSpecificCell.appendChild(document.createTextNode("&#10003;"))
+                                    userSpecificCell.appendChild(document.createTextNode("\u2713ss"))
                                 } else {
                                     var checkChallenge = document.createElement("button");
                                     checkChallenge.onclick = function () {
@@ -139,9 +139,11 @@
                                                 completed.push(value);
                                             });
                                         }
-                                        
+
                                         completed.push(key);
-                                        database.ref('users').child(user.id).child('completedChallenges').setValue(completed);
+                                        database.ref('users/' + user.id).update({completedChallenges: completed})
+
+                                        location.reload()
                                     };
                                     checkChallenge.innerHTML = "Check Challenge";
                                     userSpecificCell.appendChild(checkChallenge);
