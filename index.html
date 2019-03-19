@@ -130,30 +130,10 @@ document.getElementById("initialize").onclick =  function() {
 
     firebase.database().ref('challenges').push().set(challenges)
         .then(function(snapshot) {
-            success(); // some success method
         }, function(error) {
             console.log('error' + error);
-            error(); // some error method
         });
   }
-
-
-
-function saveToFirebase(email) {
-    var emailObject = {
-        email: email
-    };
-
-    firebase.database().ref('subscription-entries').push().set(emailObject)
-        .then(function(snapshot) {
-            success(); // some success method
-        }, function(error) {
-            console.log('error' + error);
-            error(); // some error method
-        });
-}
-
-saveToFirebase(email);
 
 
 </script>
