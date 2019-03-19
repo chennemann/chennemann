@@ -82,16 +82,24 @@
 
         var copiedUsers = Array.from(users);
 
+        copiedUsers.sort(function (a, b) {
+            return a.name === b.name ? 0 : a.name < b.name ? -1 : 1;
+        });
+
         copiedUsers.sort(function(a, b) {
 
             var completedChallengeCountA = 0;
             if (a.completedChallenges !== undefined) {
                 completedChallengeCountA = a.completedChallenges.length
+            } else {
+                a.completedChallenges = [];
             }
 
             var completedChallengeCountB = 0;
             if (b.completedChallenges !== undefined) {
                 completedChallengeCountB = b.completedChallenges.length
+            } else {
+                b.completedChallenges = [];
             }
 
             return completedChallengeCountB - completedChallengeCountA;
