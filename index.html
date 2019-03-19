@@ -2,13 +2,22 @@
 <body>
 <h1>Challenge Tracker</h1>
 
-<li>
+<table id="challengeList">
 
-</li>
+    <thead id="challengeListHeader">
+    <th>
+        Challenge Description
+    </th>
+    </thead>
+
+    <tbody id="challengeListBody">
+
+    </tbody>
+
+</table>
 
 
 <button id="initialize" style="display: none">Initialize Challenges</button>
-
 
 
 <script src="https://www.gstatic.com/firebasejs/5.9.0/firebase.js"></script>
@@ -55,7 +64,7 @@
             "Dance crazy sober at a boring bar"
         ];
 
-        var reference = database.ref('challenges')
+        var reference = database.ref('challenges');
 
         challenges.forEach(function (challenge) {
             reference.push().set(challenge)
@@ -66,11 +75,19 @@
         });
     };
 
-
     database.ref('challenges').once('value')
         .then(function (snapshot) {
             snapshot.forEach(function (challenge) {
                 console.log(challenge);
+
+                var challengesListBody = document.getElementById("challengeListBody");
+
+                var row = document.createElement("tr");
+                var descriptionCell = document.createElement("td");
+                descriptionCell.appendChild(document.createTextNode(snapshot.node_.value_));
+                row.appendChild(descriptionCell);
+                challengesListBody.appendChild(row);
+
             });
         });
 
