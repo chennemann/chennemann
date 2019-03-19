@@ -18,6 +18,7 @@
 
 
 <button id="initialize" style="display: none">Initialize Challenges</button>
+<button id="add-challenge">Add new Challenge</button>
 
 
 <script src="https://www.gstatic.com/firebasejs/5.9.0/firebase.js"></script>
@@ -34,6 +35,21 @@
     firebase.initializeApp(config);
 
     var database = firebase.database();
+
+    document.getElementById("add-challenge").onclick = function () {
+        var challenge = prompt("What should be the challenge", "");
+
+        if (challenge == null || challenge === "") {
+        } else {
+            var reference = database.ref('challenges');
+
+            reference.push().set(challenge)
+                .then(function (snapshot) {
+                }, function (error) {
+                    console.log('error' + error);
+                });
+        }
+    };
 
     document.getElementById("initialize").onclick = function () {
 
@@ -84,7 +100,7 @@
 
                 var row = document.createElement("tr");
                 var descriptionCell = document.createElement("td");
-                descriptionCell.appendChild(document.createTextNode(snapshot.node_.value_));
+                descriptionCell.appendChild(document.createTextNode(snapshot.val()));
                 row.appendChild(descriptionCell);
                 challengesListBody.appendChild(row);
 
