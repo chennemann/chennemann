@@ -1,4 +1,7 @@
-<html>
+<html> 
+<head>
+  <link rel="stylesheet" href="styles.css">
+</head>
 <body>
 <h1>Challenge Tracker</h1>
 
@@ -6,7 +9,7 @@
 
     <thead>
     <tr id="challengeListHeader">
-        <th>
+        <th class="firstColumn">
             Challenge Description
         </th>
     </tr>
@@ -119,11 +122,19 @@
 
                             var challengesListBody = document.getElementById("challengeListBody");
 
-                            var row = document.createElement("tr");
+                            var challengeRow = document.createElement("tr");
+                            challengeRow.setAttribute("class", "challengeRow");
+
                             var descriptionCell = document.createElement("td");
+                            descriptionCell.setAttribute("colspan", users.length + 1);
                             descriptionCell.appendChild(document.createTextNode(challenge));
-                            row.appendChild(descriptionCell);
-                            
+                            challengeRow.appendChild(descriptionCell);
+
+                            var userRow = document.createElement("tr");
+                            userRow.setAttribute("class", "userRow");
+                            var firstRowSpacer = document.createElement("td");
+                            firstRowSpacer.setAttribute("class", "firstColumn");
+                            userRow.appendChild(firstRowSpacer);
                             users.forEach(function (user) {
                                 var userSpecificCell = document.createElement("td");
                                 var completedChallenges = user.completedChallenges;
@@ -131,6 +142,7 @@
                                     userSpecificCell.appendChild(document.createTextNode("\u2713"))
                                 } else {
                                     var checkChallenge = document.createElement("button");
+                                    checkChallenge.setAttribute("class", "checkButton");
                                     checkChallenge.onclick = function () {
 
                                         var completed = [];
@@ -148,10 +160,20 @@
                                     checkChallenge.innerHTML = "Check Challenge";
                                     userSpecificCell.appendChild(checkChallenge);
                                 }
-                                row.appendChild(userSpecificCell);
+                                userRow.appendChild(userSpecificCell);
                             });
+
+
+                            var challengeSpacerRow = document.createElement("tr");
+                            challengeSpacerRow.setAttribute("class", "challengeSpacer");
+                            var userSpacerRow = document.createElement("tr");
+                            userSpacerRow.setAttribute("class", "userSpacer");
+
                             
-                            challengesListBody.appendChild(row);
+                            challengesListBody.appendChild(challengeRow);
+                            challengesListBody.appendChild(challengeSpacerRow);
+                            challengesListBody.appendChild(userRow);
+                            challengesListBody.appendChild(userSpacerRow);
                         });
                     }
                 });
