@@ -78,7 +78,49 @@
     });
 
 
-    function initializeLeaderboard(users) {
+    function initializeLeaderboard(users, challengeCount) {
+
+        var copiedUsers = Array.from(users);
+
+        copiedUsers.sort(function(a, b) {
+
+            var completedChallengeCountA = 0;
+            if (a.completedChallenges !== undefined) {
+                completedChallengeCountA = a.completedChallenges.length
+            }
+
+            var completedChallengeCountB = 0;
+            if (b.completedChallenges !== undefined) {
+                completedChallengeCountB = b.completedChallenges.length
+            }
+
+            return completedChallengeCountB - completedChallengeCountA;
+        });
+
+        copiedUsers.forEach(function (user, index) {
+
+            var leaderboardUserContainer = document.createElement("div");
+            leaderboardUserContainer.setAttribute("class", "leaderboardUserContainer");
+
+            var position = document.createElement("div");
+            position.setAttribute("class", "position");
+            position.appendChild(document.createTextNode((index+1) + "."));
+
+            var userName = document.createElement("div");
+            userName.setAttribute("class", "userName");
+            userName.appendChild(document.createTextNode(user.name));
+
+            var count = document.createElement("div");
+            count.setAttribute("class", "count");
+            count.appendChild(document.createTextNode(user.completedChallenges.length + "/" + challengeCount));
+
+            leaderboardUserContainer.appendChild(position);
+            leaderboardUserContainer.appendChild(userName);
+            leaderboardUserContainer.appendChild(count);
+
+            $("#leaderboardContainer").append(leaderboardUserContainer);
+        });
+
 
     }
 
@@ -108,6 +150,7 @@
 
             var completedChallenges = user.completedChallenges;
             if (completedChallenges !== undefined && completedChallenges.indexOf(challengeKey) !== -1) {
+                actionContainer.setAttribute("class", "actionContainer checked");
                 actionContainer.appendChild(document.createTextNode("\u2713"))
             } else {
                 var checkButton = document.createElement("button");
@@ -173,6 +216,9 @@
                     var challengeMap = challengeSnapshot.val();
 
                     if (challengeMap !== undefined && challengeMap !== null) {
+
+                        initializeLeaderboard(users, Object.keys(challengeMap).length);
+
                         Object.keys(challengeMap).forEach(function (key) {
                             var challenge = challengeMap[key];
 

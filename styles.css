@@ -23,6 +23,29 @@ h1#headline {
     font-size: 16px;
 }
 
+.leaderboardUserContainer {
+    margin-bottom: 15px;
+    padding-left: 35px;
+}
+
+.leaderboardUserContainer div {
+    display: inline-block;
+}
+
+.position {
+    font-size: 1.5rem;
+    font-weight: bold;
+    width: 35px;
+}
+
+.leaderboardUserContainer .userName {
+    width: 250px;
+}
+
+.count {
+}
+
+
 #contentContainer {
     padding: 25px;
 }
