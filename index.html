@@ -99,7 +99,11 @@
                     userCell.appendChild(document.createTextNode(user.name));
                     challengesListHeader.appendChild(userCell);
 
-                    users.push(user);
+                    users.push({
+                        id: key,
+                        name: user.name,
+                        completedChallenges: user.completedChallenges
+                    });
                 });
             }
 
@@ -128,7 +132,8 @@
                                 } else {
                                     var checkChallenge = document.createElement("button");
                                     checkChallenge.onclick = function () {
-                                        console.log("Check Challenge " + key + " for user " + user.name);
+                                        var updatedCompletedChallenges = user.completedChallenges.push(key);
+                                        database.ref('users').child(user.id).child('completedChallenges').setValue(updatedCompletedChallenges);
                                     };
                                     checkChallenge.innerHTML = "Check Challenge";
                                     userSpecificCell.appendChild(checkChallenge);
