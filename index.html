@@ -1,72 +1,79 @@
 <html>
-    <body>
+<body>
 <h1>Challenge Tracker</h1>
 
 <li>
-    
+
 </li>
 
 
-<button id="initialize">Initialize Challenges</button>
-
-
-
+<!--<button id="initialize">Initialize Challenges</button>-->
 
 
 <script src="https://www.gstatic.com/firebasejs/5.9.0/firebase.js"></script>
 <script>
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyComvDhjmTxZV6s07x7hxOCgnB0D9OxTWk",
-    authDomain: "challenge-tracker-h-block.firebaseapp.com",
-    databaseURL: "https://challenge-tracker-h-block.firebaseio.com",
-    projectId: "challenge-tracker-h-block",
-    storageBucket: "challenge-tracker-h-block.appspot.com",
-    messagingSenderId: "497930259522"
-  };
-  firebase.initializeApp(config);
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyComvDhjmTxZV6s07x7hxOCgnB0D9OxTWk",
+        authDomain: "challenge-tracker-h-block.firebaseapp.com",
+        databaseURL: "https://challenge-tracker-h-block.firebaseio.com",
+        projectId: "challenge-tracker-h-block",
+        storageBucket: "challenge-tracker-h-block.appspot.com",
+        messagingSenderId: "497930259522"
+    };
+    firebase.initializeApp(config);
 
-document.getElementById("initialize").onclick =  function() {
+    var database = firebase.database();
 
-      var challenges =  [
-          "Take a swim in the themes",
-          "Dress as the other gender for a day",
-          "Singing in Leicester Square for 10 minutes",
-          "Lie with underwear on Oxford street for two minutes",
-          "Staring at random people sitting in a restaurant for 5 minutes",
-          "Steal someone’s McDonald’s food",
-          "Making out with someone from mclaren (not from H block)",
-          "Sleeping with someone from Mclaren",
-          "Kiss someone from the same gender ( not a friend)",
-          "Someone from the same gender has buy you a drink (not a friend)",
-          "Asking specific questions about a sex product in a porn store",
-          "Changing hair colour",
-          "Go on a date at the same bar as H4",
-          "Sneezing loudly in a lecture standing up",
-          "Ask the security guard in mclaren about a blind eye about a one night stand",
-          "Put the fire alarm on",
-          "Going on a date someone you not met online or drunk",
-          "Pretending to fart on the tube",
-          "Hit on someone at the tube",
-          "Pee in the middle of mclaren",
-          "Run naked from H block to the laundry and back",
-          "Eating a chilli",
-          "Flirt with a police officer",
-          "Dance crazy sober at a boring bar"
-      ];
+    document.getElementById("initialize").onclick = function () {
 
-    var reference = firebase.database().ref('challenges')
-    
-    challenges.forEach(function(challenge) {
-    reference.push().set(challenge)
-        .then(function(snapshot) {
-        }, function(error) {
-            console.log('error' + error);
+        var challenges = [
+            "Take a swim in the themes",
+            "Dress as the other gender for a day",
+            "Singing in Leicester Square for 10 minutes",
+            "Lie with underwear on Oxford street for two minutes",
+            "Staring at random people sitting in a restaurant for 5 minutes",
+            "Steal someone’s McDonald’s food",
+            "Making out with someone from mclaren (not from H block)",
+            "Sleeping with someone from Mclaren",
+            "Kiss someone from the same gender ( not a friend)",
+            "Someone from the same gender has buy you a drink (not a friend)",
+            "Asking specific questions about a sex product in a porn store",
+            "Changing hair colour",
+            "Go on a date at the same bar as H4",
+            "Sneezing loudly in a lecture standing up",
+            "Ask the security guard in mclaren about a blind eye about a one night stand",
+            "Put the fire alarm on",
+            "Going on a date someone you not met online or drunk",
+            "Pretending to fart on the tube",
+            "Hit on someone at the tube",
+            "Pee in the middle of mclaren",
+            "Run naked from H block to the laundry and back",
+            "Eating a chilli",
+            "Flirt with a police officer",
+            "Dance crazy sober at a boring bar"
+        ];
+
+        var reference = database.ref('challenges')
+
+        challenges.forEach(function (challenge) {
+            reference.push().set(challenge)
+                .then(function (snapshot) {
+                }, function (error) {
+                    console.log('error' + error);
+                });
         });
-    });
-  }
+    };
+
+
+    database.ref('challenges').once('value')
+        .then(function (snapshot) {
+            snapshot.forEach(function (challenge) {
+                console.log(challenge);
+            });
+        });
 
 
 </script>
-    </body>
+</body>
 </html>
