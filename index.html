@@ -36,6 +36,7 @@
 
     var database = firebase.database();
 
+    // Add a new challenge to the database
     document.getElementById("add-challenge").onclick = function () {
         var challenge = prompt("What should be the challenge", "");
 
@@ -49,6 +50,8 @@
                     console.log('error' + error);
                 });
         }
+
+        location.reload()
     };
 
     document.getElementById("initialize").onclick = function () {
@@ -91,19 +94,23 @@
         });
     };
 
+    // Display all available challenges
     database.ref('challenges').once('value')
         .then(function (snapshot) {
-            snapshot.forEach(function (challenge) {
+
+            var map = snapshot.val();
+
+            Object.keys(map).forEach(function(key) {
+                var challenge = map[key];
                 console.log(challenge);
 
                 var challengesListBody = document.getElementById("challengeListBody");
 
                 var row = document.createElement("tr");
                 var descriptionCell = document.createElement("td");
-                descriptionCell.appendChild(document.createTextNode(snapshot.val()));
+                descriptionCell.appendChild(document.createTextNode(challenge));
                 row.appendChild(descriptionCell);
                 challengesListBody.appendChild(row);
-
             });
         });
 
