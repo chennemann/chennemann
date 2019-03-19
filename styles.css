@@ -27,6 +27,7 @@ h1#headline {
     margin-bottom: 15px;
     padding-left: 35px;
     padding-right: 35px;
+    clear: both;
 }
 
 .leaderboardUserContainer div {
@@ -44,6 +45,7 @@ h1#headline {
 }
 
 .count {
+    float: right;
 }
 
 
