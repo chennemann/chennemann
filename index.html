@@ -1,1 +1,161 @@
+<html>
+    <body>
 <h1>Challenge Tracker</h1>
+
+<li>
+    
+</li>
+
+
+<button id="initialize">Initialize Challenges</button>
+
+
+
+
+
+<script src="https://www.gstatic.com/firebasejs/5.9.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyComvDhjmTxZV6s07x7hxOCgnB0D9OxTWk",
+    authDomain: "challenge-tracker-h-block.firebaseapp.com",
+    databaseURL: "https://challenge-tracker-h-block.firebaseio.com",
+    projectId: "challenge-tracker-h-block",
+    storageBucket: "challenge-tracker-h-block.appspot.com",
+    messagingSenderId: "497930259522"
+  };
+  firebase.initializeApp(config);
+
+document.getElementById("initialize").onclick =  function() {
+
+      var challenges =  [
+          {
+              id: 1,
+              challenge: "Take a swim in the themes"
+          },
+          {
+              id: 2,
+              challenge: "Dress as the other gender for a day"
+          },
+          {
+              id: 3,
+              challenge: "Singing in Leicester Square for 10 minutes"
+          },
+          {
+              id: 4,
+              challenge: "Lie with underwear on Oxford street for two minutes"
+          },
+          {
+              id: 5,
+              challenge: "Staring at random people sitting in a restaurant for 5 minutes"
+          },
+          {
+              id: 6,
+              challenge: "Steal someone’s McDonald’s food"
+          },
+          {
+              id: 7,
+              challenge: "Making out with someone from mclaren (not from H block)"
+          },
+          {
+              id: 8,
+              challenge: "Sleeping with someone from Mclaren"
+          },
+          {
+              id: 9,
+              challenge: "Kiss someone from the same gender ( not a friend)"
+          },
+          {
+              id: 10,
+              challenge: "Someone from the same gender has buy you a drink (not a friend)"
+          },
+          {
+              id: 11,
+              challenge: "Asking specific questions about a sex product in a porn store"
+          },
+          {
+              id: 12,
+              challenge: "Changing hair colour"
+          },
+          {
+              id: 13,
+              challenge: "Go on a date at the same bar as H4"
+          },
+          {
+              id: 14,
+              challenge: "Sneezing loudly in a lecture standing up"
+          },
+          {
+              id: 15,
+              challenge: "Ask the security guard in mclaren about a blind eye about a one night stand"
+          },
+          {
+              id: 16,
+              challenge: "Put the fire alarm on"
+          },
+          {
+              id: 17,
+              challenge: "Going on a date someone you not met online or drunk"
+          },
+          {
+              id: 18,
+              challenge: "Pretending to fart on the tube"
+          },
+          {
+              id: 19,
+              challenge: "Hit on someone at the tube"
+          },
+          {
+              id: 20,
+              challenge: "Pee in the middle of mclaren"
+          },
+          {
+              id: 21,
+              challenge: "Run naked from H block to the laundry and back"
+          },
+          {
+              id: 22,
+              challenge: "Eating a chilli"
+          },
+          {
+              id: 23,
+              challenge: "Flirt with a police officer"
+          },
+          {
+              id: 24,
+              challenge: "Dance crazy sober at a boring bar"
+          }
+          
+      ];
+
+    firebase.database().ref('challenges').push().set(challenges)
+        .then(function(snapshot) {
+            success(); // some success method
+        }, function(error) {
+            console.log('error' + error);
+            error(); // some error method
+        });
+  }
+
+
+
+function saveToFirebase(email) {
+    var emailObject = {
+        email: email
+    };
+
+    firebase.database().ref('subscription-entries').push().set(emailObject)
+        .then(function(snapshot) {
+            success(); // some success method
+        }, function(error) {
+            console.log('error' + error);
+            error(); // some error method
+        });
+}
+
+saveToFirebase(email);
+
+
+</script>
+    </body>
+</html>
