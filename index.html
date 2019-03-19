@@ -132,8 +132,16 @@
                                 } else {
                                     var checkChallenge = document.createElement("button");
                                     checkChallenge.onclick = function () {
-                                        var updatedCompletedChallenges = user.completedChallenges.push(key);
-                                        database.ref('users').child(user.id).child('completedChallenges').setValue(updatedCompletedChallenges);
+
+                                        var completed = [];
+                                        if (user.completedChallenges !== undefined && user.completedChallenges !== null) {
+                                            user.completedChallenges.forEach(function (value) {
+                                                completed.push(value);
+                                            });
+                                        }
+                                        
+                                        completed.push(key);
+                                        database.ref('users').child(user.id).child('completedChallenges').setValue(completed);
                                     };
                                     checkChallenge.innerHTML = "Check Challenge";
                                     userSpecificCell.appendChild(checkChallenge);
