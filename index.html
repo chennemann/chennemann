@@ -122,7 +122,8 @@
                             
                             users.forEach(function (user) {
                                 var userSpecificCell = document.createElement("td");
-                                if (user.completedChallenges.indexOf(key) != -1) {
+                                var completedChallenges = user.completedChallenges;
+                                if (completedChallenges !== undefined && completedChallenges.indexOf(key) !== -1) {
                                     userSpecificCell.appendChild(document.createTextNode("&#10003;"))
                                 } else {
                                     var checkChallenge = document.createElement("button");
