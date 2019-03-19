@@ -4,10 +4,12 @@
 
 <table id="challengeList">
 
-    <thead id="challengeListHeader">
-    <th>
-        Challenge Description
-    </th>
+    <thead>
+    <tr id="challengeListHeader">
+        <th>
+            Challenge Description
+        </th>
+    </tr>
     </thead>
 
     <tbody id="challengeListBody">
@@ -79,53 +81,13 @@
         location.reload()
     };
 
-    document.getElementById("initialize").onclick = function () {
-
-        var challenges = [
-            "Take a swim in the themes",
-            "Dress as the other gender for a day",
-            "Singing in Leicester Square for 10 minutes",
-            "Lie with underwear on Oxford street for two minutes",
-            "Staring at random people sitting in a restaurant for 5 minutes",
-            "Steal someone’s McDonald’s food",
-            "Making out with someone from mclaren (not from H block)",
-            "Sleeping with someone from Mclaren",
-            "Kiss someone from the same gender ( not a friend)",
-            "Someone from the same gender has buy you a drink (not a friend)",
-            "Asking specific questions about a sex product in a porn store",
-            "Changing hair colour",
-            "Go on a date at the same bar as H4",
-            "Sneezing loudly in a lecture standing up",
-            "Ask the security guard in mclaren about a blind eye about a one night stand",
-            "Put the fire alarm on",
-            "Going on a date someone you not met online or drunk",
-            "Pretending to fart on the tube",
-            "Hit on someone at the tube",
-            "Pee in the middle of mclaren",
-            "Run naked from H block to the laundry and back",
-            "Eating a chilli",
-            "Flirt with a police officer",
-            "Dance crazy sober at a boring bar"
-        ];
-
-        var reference = database.ref('challenges');
-
-        challenges.forEach(function (challenge) {
-            reference.push().set(challenge)
-                .then(function (snapshot) {
-                }, function (error) {
-                    console.log('error' + error);
-                });
-        });
-    };
-
-    var users = [];
-
     // Display all available challenges
     database.ref('users').once('value')
         .then(function (userSnapshot) {
 
             var userMap = userSnapshot.val();
+
+            var users = [];
 
             if (userMap !== undefined && userMap !== null) {
                 Object.keys(userMap).forEach(function (key) {
@@ -136,6 +98,8 @@
                     var userCell = document.createElement("th");
                     userCell.appendChild(document.createTextNode(user.name));
                     challengesListHeader.appendChild(userCell);
+
+                    users.push(user);
                 });
             }
 
@@ -155,6 +119,20 @@
                             var descriptionCell = document.createElement("td");
                             descriptionCell.appendChild(document.createTextNode(challenge));
                             row.appendChild(descriptionCell);
+                            
+                            users.forEach(function (user) {
+                                var userSpecificCell = document.createElement("td");
+                                if (user.completedChallenges.indexOf(key) != -1) {
+                                    userSpecificCell.appendChild(document.createTextNode("&#10003;"))
+                                } else {
+                                    var checkChallenge = document.createElement("button");
+                                    checkChallenge.onclick = function () {
+                                        console.log("Check Challenge " + key + " for user " + user.name);
+                                    };
+                                    checkChallenge.innerHTML = "Check Challenge";
+                                }
+                            });
+                            
                             challengesListBody.appendChild(row);
                         });
                     }
