@@ -1,18 +1,74 @@
-table th {
-    text-align: left;
+body {
+    font-family: sans-serif;
 }
 
-table tr.challengeSpacer {
-    height: 5px;
+h1#headline {
+    text-align: center;
+    margin-top: 50px;
 }
 
-table tr.userSpacer {
-    height: 25px;
+.globalActionContainer {
+    padding: 25px;
 }
 
-table .firstColumn {
-    width: 40%;
-    min-width: 40%;
-    max-width: 40%;
-    word-break: break-all;
+.globalActionContainer button {
+    margin-right: 35px;
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
 }
+
+#contentContainer {
+    padding: 25px;
+}
+
+#leaderboardContainer {
+    padding: 25px;
+}
+
+.challengeContainer {
+    padding: 35px;
+    padding-bottom: 0;
+}
+
+.challengeTitle {
+    padding: 15px;
+    background: #eee;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
+.selectionContainer {
+    padding: 15px;
+}
+
+.userContainer {
+    display: inline-block;
+    margin-right: 25px;
+}
+
+.userName {
+    font-weight: bold;
+}
+
+.actionContainer {
+    margin-top: 5px;
+}
+
+.checkButton {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 5px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+

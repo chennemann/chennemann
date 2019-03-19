@@ -1,32 +1,27 @@
-<html> 
+<html>
 <head>
-  <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<h1>Challenge Tracker</h1>
+<h1 id="headline">Challenge Tracker</h1>
 
-<table id="challengeList">
+<div class="globalActionContainer">
+    <button id="add-challenge">Add new Challenge</button>
+    <button id="add-user">Add new User</button>
+</div>
 
-    <thead>
-    <tr id="challengeListHeader">
-        <th class="firstColumn">
-            Challenge Description
-        </th>
-    </tr>
-    </thead>
+<div id="leaderboardContainer">
+    <h2 class="leaderboardHeadline">Leaderboard</h2>
+</div>
 
-    <tbody id="challengeListBody">
+<div id="contentContainer">
+    <h2 class="challengeHeadline">Challenges</h2>
+</div>
 
-    </tbody>
-
-</table>
-
-
-<button id="initialize" style="display: none">Initialize Challenges</button>
-<button id="add-challenge">Add new Challenge</button>
-<button id="add-user">Add new User</button>
-
-
+<script
+        src="http://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
+        crossorigin="anonymous"></script>
 <script src="https://www.gstatic.com/firebasejs/5.9.0/firebase.js"></script>
 <script>
     // Initialize Firebase
@@ -43,25 +38,23 @@
     var database = firebase.database();
 
     // Add a new challenge to the database
-    document.getElementById("add-challenge").onclick = function () {
+    $("#add-challenge").click(function () {
         var challenge = prompt("What should be the challenge?", "");
 
         if (challenge == null || challenge === "") {
         } else {
-            var reference = database.ref('challenges');
-
-            reference.push().set(challenge)
+            database.ref('challenges').push().set(challenge)
                 .then(function (snapshot) {
                 }, function (error) {
                     console.log('error' + error);
                 });
         }
 
-        location.reload()
-    };
+        location.reload();
+    });
 
     // Add a new user to the database
-    document.getElementById("add-user").onclick = function () {
+    $("#add-user").click(function () {
         var userName = prompt("What is your name?", "");
 
         if (userName == null || userName === "") {
@@ -81,8 +74,77 @@
                 });
         }
 
-        location.reload()
-    };
+        location.reload();
+    });
+
+
+    function initializeLeaderboard(users) {
+
+    }
+
+
+    function addChallenge(challenge, challengeKey, users) {
+
+        var challengeTitle = document.createElement("div");
+        challengeTitle.setAttribute("class", "challengeTitle");
+        challengeTitle.appendChild(document.createTextNode(challenge));
+
+        var challengeContainer = document.createElement("div");
+        challengeContainer.setAttribute("class", "challengeContainer");
+        challengeContainer.appendChild(challengeTitle);
+
+        var selectionContainer = document.createElement("div");
+        selectionContainer.setAttribute("class", "selectionContainer");
+
+        users.forEach(function (user) {
+
+            var userName = document.createElement("div");
+            userName.setAttribute("class", "userName");
+            userName.appendChild(document.createTextNode(user.name));
+
+            var actionContainer = document.createElement("div");
+            actionContainer.setAttribute("class", "actionContainer");
+
+
+            var completedChallenges = user.completedChallenges;
+            if (completedChallenges !== undefined && completedChallenges.indexOf(challengeKey) !== -1) {
+                actionContainer.appendChild(document.createTextNode("\u2713"))
+            } else {
+                var checkButton = document.createElement("button");
+                checkButton.setAttribute("class", "checkButton");
+                checkButton.onclick = function () {
+
+                    var completed = [];
+                    if (user.completedChallenges !== undefined && user.completedChallenges !== null) {
+                        user.completedChallenges.forEach(function (value) {
+                            completed.push(value);
+                        });
+                    }
+
+                    completed.push(challengeKey);
+                    database.ref('users/' + user.id).update({completedChallenges: completed});
+
+                    location.reload()
+                };
+                checkButton.innerHTML = "I did it!";
+                actionContainer.appendChild(checkButton);
+            }
+
+            var userContainer = document.createElement("div");
+            userContainer.setAttribute("class", "userContainer");
+            userContainer.appendChild(userName);
+            userContainer.appendChild(actionContainer);
+            selectionContainer.appendChild(userContainer);
+
+        });
+
+
+        challengeContainer.appendChild(selectionContainer);
+        $("#contentContainer").append(challengeContainer);
+
+
+
+    }
 
     // Display all available challenges
     database.ref('users').once('value')
@@ -95,12 +157,6 @@
             if (userMap !== undefined && userMap !== null) {
                 Object.keys(userMap).forEach(function (key) {
                     var user = userMap[key];
-
-                    var challengesListHeader = document.getElementById("challengeListHeader");
-
-                    var userCell = document.createElement("th");
-                    userCell.appendChild(document.createTextNode(user.name));
-                    challengesListHeader.appendChild(userCell);
 
                     users.push({
                         id: key,
@@ -120,60 +176,7 @@
                         Object.keys(challengeMap).forEach(function (key) {
                             var challenge = challengeMap[key];
 
-                            var challengesListBody = document.getElementById("challengeListBody");
-
-                            var challengeRow = document.createElement("tr");
-                            challengeRow.setAttribute("class", "challengeRow");
-
-                            var descriptionCell = document.createElement("td");
-                            descriptionCell.setAttribute("colspan", users.length + 1);
-                            descriptionCell.appendChild(document.createTextNode(challenge));
-                            challengeRow.appendChild(descriptionCell);
-
-                            var userRow = document.createElement("tr");
-                            userRow.setAttribute("class", "userRow");
-                            var firstRowSpacer = document.createElement("td");
-                            firstRowSpacer.setAttribute("class", "firstColumn");
-                            userRow.appendChild(firstRowSpacer);
-                            users.forEach(function (user) {
-                                var userSpecificCell = document.createElement("td");
-                                var completedChallenges = user.completedChallenges;
-                                if (completedChallenges !== undefined && completedChallenges.indexOf(key) !== -1) {
-                                    userSpecificCell.appendChild(document.createTextNode("\u2713"))
-                                } else {
-                                    var checkChallenge = document.createElement("button");
-                                    checkChallenge.setAttribute("class", "checkButton");
-                                    checkChallenge.onclick = function () {
-
-                                        var completed = [];
-                                        if (user.completedChallenges !== undefined && user.completedChallenges !== null) {
-                                            user.completedChallenges.forEach(function (value) {
-                                                completed.push(value);
-                                            });
-                                        }
-
-                                        completed.push(key);
-                                        database.ref('users/' + user.id).update({completedChallenges: completed})
-
-                                        location.reload()
-                                    };
-                                    checkChallenge.innerHTML = "Check Challenge";
-                                    userSpecificCell.appendChild(checkChallenge);
-                                }
-                                userRow.appendChild(userSpecificCell);
-                            });
-
-
-                            var challengeSpacerRow = document.createElement("tr");
-                            challengeSpacerRow.setAttribute("class", "challengeSpacer");
-                            var userSpacerRow = document.createElement("tr");
-                            userSpacerRow.setAttribute("class", "userSpacer");
-
-                            
-                            challengesListBody.appendChild(challengeRow);
-                            challengesListBody.appendChild(challengeSpacerRow);
-                            challengesListBody.appendChild(userRow);
-                            challengesListBody.appendChild(userSpacerRow);
+                            addChallenge(challenge, key, users);
                         });
                     }
                 });
