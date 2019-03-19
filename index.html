@@ -125,35 +125,39 @@
     database.ref('users').once('value')
         .then(function (userSnapshot) {
 
-            var map = userSnapshot.val();
+            var userMap = userSnapshot.val();
 
-            Object.keys(map).forEach(function(key) {
-                var user = map[key];
+            if (userMap !== undefined && userMap !== null) {
+                Object.keys(userMap).forEach(function (key) {
+                    var user = userMap[key];
 
-                var challengesListHeader = document.getElementById("challengeListHeader");
+                    var challengesListHeader = document.getElementById("challengeListHeader");
 
-                var userCell = document.createElement("th");
-                userCell.appendChild(document.createTextNode(user.name));
-                challengesListHeader.appendChild(userCell);
-            });
+                    var userCell = document.createElement("th");
+                    userCell.appendChild(document.createTextNode(user.name));
+                    challengesListHeader.appendChild(userCell);
+                });
+            }
 
             // Display all available challenges
             database.ref('challenges').once('value')
                 .then(function (challengeSnapshot) {
 
-                    var map = challengeSnapshot.val();
+                    var challengeMap = challengeSnapshot.val();
 
-                    Object.keys(map).forEach(function(key) {
-                        var challenge = map[key];
+                    if (challengeMap !== undefined && challengeMap !== null) {
+                        Object.keys(challengeMap).forEach(function (key) {
+                            var challenge = challengeMap[key];
 
-                        var challengesListBody = document.getElementById("challengeListBody");
+                            var challengesListBody = document.getElementById("challengeListBody");
 
-                        var row = document.createElement("tr");
-                        var descriptionCell = document.createElement("td");
-                        descriptionCell.appendChild(document.createTextNode(challenge));
-                        row.appendChild(descriptionCell);
-                        challengesListBody.appendChild(row);
-                    });
+                            var row = document.createElement("tr");
+                            var descriptionCell = document.createElement("td");
+                            descriptionCell.appendChild(document.createTextNode(challenge));
+                            row.appendChild(descriptionCell);
+                            challengesListBody.appendChild(row);
+                        });
+                    }
                 });
         });
 
