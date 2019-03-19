@@ -19,6 +19,7 @@
 
 <button id="initialize" style="display: none">Initialize Challenges</button>
 <button id="add-challenge">Add new Challenge</button>
+<button id="add-user">Add new User</button>
 
 
 <script src="https://www.gstatic.com/firebasejs/5.9.0/firebase.js"></script>
@@ -38,13 +39,37 @@
 
     // Add a new challenge to the database
     document.getElementById("add-challenge").onclick = function () {
-        var challenge = prompt("What should be the challenge", "");
+        var challenge = prompt("What should be the challenge?", "");
 
         if (challenge == null || challenge === "") {
         } else {
             var reference = database.ref('challenges');
 
             reference.push().set(challenge)
+                .then(function (snapshot) {
+                }, function (error) {
+                    console.log('error' + error);
+                });
+        }
+
+        location.reload()
+    };
+
+    // Add a new user to the database
+    document.getElementById("add-user").onclick = function () {
+        var userName = prompt("What is your name?", "");
+
+        if (userName == null || userName === "") {
+        } else {
+
+            var reference = database.ref('users');
+
+            var user = {
+                name: userName,
+                completedChallenges: []
+            };
+
+            reference.push().set(user)
                 .then(function (snapshot) {
                 }, function (error) {
                     console.log('error' + error);
@@ -94,24 +119,42 @@
         });
     };
 
-    // Display all available challenges
-    database.ref('challenges').once('value')
-        .then(function (snapshot) {
+    var users = [];
 
-            var map = snapshot.val();
+    // Display all available challenges
+    database.ref('users').once('value')
+        .then(function (userSnapshot) {
+
+            var map = userSnapshot.val();
 
             Object.keys(map).forEach(function(key) {
-                var challenge = map[key];
-                console.log(challenge);
+                var user = map[key];
 
-                var challengesListBody = document.getElementById("challengeListBody");
+                var challengesListHeader = document.getElementById("challengeListHeader");
 
-                var row = document.createElement("tr");
-                var descriptionCell = document.createElement("td");
-                descriptionCell.appendChild(document.createTextNode(challenge));
-                row.appendChild(descriptionCell);
-                challengesListBody.appendChild(row);
+                var userCell = document.createElement("th");
+                userCell.appendChild(document.createTextNode(user.name));
+                challengesListHeader.appendChild(userCell);
             });
+
+            // Display all available challenges
+            database.ref('challenges').once('value')
+                .then(function (challengeSnapshot) {
+
+                    var map = challengeSnapshot.val();
+
+                    Object.keys(map).forEach(function(key) {
+                        var challenge = map[key];
+
+                        var challengesListBody = document.getElementById("challengeListBody");
+
+                        var row = document.createElement("tr");
+                        var descriptionCell = document.createElement("td");
+                        descriptionCell.appendChild(document.createTextNode(challenge));
+                        row.appendChild(descriptionCell);
+                        challengesListBody.appendChild(row);
+                    });
+                });
         });
 
 
