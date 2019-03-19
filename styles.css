@@ -45,6 +45,7 @@ h1#headline {
 
 .count {
     float: right;
+    padding-top: 10px;
 }
 
 
@@ -57,7 +58,6 @@ h1#headline {
 }
 
 .challengeContainer {
-    padding-top: 35px;
     padding-right: 35px;
     padding-bottom: 0;
 }
@@ -77,6 +77,7 @@ h1#headline {
 .userContainer {
     display: inline-block;
     margin-right: 25px;
+    margin-bottom: 25px;
 }
 
 .userName {
