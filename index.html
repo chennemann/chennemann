@@ -157,7 +157,27 @@
             var completedChallenges = user.completedChallenges;
             if (completedChallenges !== undefined && completedChallenges.indexOf(challengeKey) !== -1) {
                 actionContainer.setAttribute("class", "actionContainer checked");
-                actionContainer.appendChild(document.createTextNode("\u2713"))
+
+                var uncheckButton = document.createElement("button");
+                uncheckButton.setAttribute("class", "checkButton");
+                uncheckButton.onclick = function () {
+
+                    var completed = [];
+                    if (user.completedChallenges !== undefined && user.completedChallenges !== null) {
+                        user.completedChallenges.forEach(function (value) {
+                            if (value != challengeKey) {
+                                completed.push(value);
+                            }
+                        });
+                    }
+
+                    database.ref('users/' + user.id).update({completedChallenges: completed});
+
+                    location.reload()
+                };
+                uncheckButton.innerHTML = "\u2713";
+                actionContainer.appendChild(uncheckButton);
+
             } else {
                 var checkButton = document.createElement("button");
                 checkButton.setAttribute("class", "checkButton");
